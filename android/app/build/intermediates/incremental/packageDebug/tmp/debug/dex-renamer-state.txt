@@ -1,10 +1,10 @@
-#Wed Aug 02 16:57:03 EDT 2023
-base.0=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
-base.1=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
-base.2=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.3=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/11/classes.dex
-base.4=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/14/classes.dex
-base.5=/Users/ankitasharma/Desktop/syntax7/MDEV1014-Syntax7/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
+#Fri Aug 04 15:19:04 EDT 2023
+base.0=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+base.1=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
+base.2=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.3=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/11/classes.dex
+base.4=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/14/classes.dex
+base.5=/Users/ankitasharma/Desktop/untitled folder/MDEV1014-Syntax7-AssignmentReactNative/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
 path.0=classes.dex
 path.1=0/classes.dex
 path.2=0/classes.dex
