@@ -1,24 +1,23 @@
+
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import AuthViewModel from './AuthViewModel';
 
-const SignInPage = ({ navigation, onLoginSuccess }) => {
+const SignInPage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = () => {
-    // Mock user credentials
-    const mockEmail = 'test@example.com';
-    const mockPassword = '123456';
-
-    // Check if the input credentials match the mock credentials
-    if (email === mockEmail && password === mockPassword) {
-      // If credentials match, show a success message, set userLoggedIn to true, and navigate to Home tab screen
-      Alert.alert('Sign In Successful', 'Welcome back!');
-      onLoginSuccess();
-      navigation.navigate('Home');
+  const handleSignIn = async () => {
+    if (email && password) {
+      try {
+        await AuthViewModel.signIn(email, password);
+        Alert.alert('Sign In Successful', 'Welcome back!');
+        navigation.navigate('Home');
+      } catch (error) {
+        Alert.alert('Error', 'Failed to sign in. Please try again.');
+      }
     } else {
-      // If credentials don't match, show an error message
-      Alert.alert('Error', 'Invalid email or password. Please try again.');
+      Alert.alert('Error', 'Please enter valid email and password.');
     }
   };
 
