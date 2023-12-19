@@ -1,42 +1,53 @@
-# Uncomment the next line to define a global platform for your project
-platform :ios, '14.0'
+require 'json'
+require 'open3'
 
-# Set use_modular_headers globally
-use_modular_headers!
+def react_native_pods_script_path
+  node_script = <<-SCRIPT
+    const path = require('path');
+    const scriptPath = require.resolve('react-native/scripts/react_native_pods.rb', { paths: [process.argv[1]] });
+    console.log(scriptPath);
+  SCRIPT
+  command = ['node', '-e', node_script, __FILE__]
+  path, status = Open3.capture2(*command)
+  path.strip if status.success?
+end
+
+resolved_script_path = react_native_pods_script_path
+
+platform :ios, '10.0'
 
 target 'ReactNativeProject' do
-  # Add your existing pods here if you have any...
+  # Add any other dependencies you need
 
+  pod 'RCT-Folly', :path => resolved_script_path
 
-  # Add YogaKit pod
-  pod 'YogaKit', '~> 1.18.1'
+  # Use Flipper if it's not explicitly disabled
+  flipper_enabled = ENV['NO_FLIPPER'] != '1'
+  if flipper_enabled
+    flipper_configuration = 'Flipper'
+    pod flipper_configuration, :path => resolved_script_path + "/Flipper"
+    pod 'DoubleConversion', :podspec => "#{resolved_script_path}/DoubleConversion.podspec"
+    pod 'Flipper-Folly', :podspec => "#{resolved_script_path}/Flipper-Folly.podspec"
+    pod 'Flipper-Glog', :podspec => "#{resolved_script_path}/Flipper-Glog.podspec"
+    pod 'Flipper-PeerTalk', :podspec => "#{resolved_script_path}/Flipper-PeerTalk.podspec"
+    pod 'Flipper-RSocket', :podspec => "#{resolved_script_path}/Flipper-RSocket.podspec"
+  end
 
-  # Resolve react_native_pods.rb with node to allow for hoisting
-  require File.join(__dir__, '..', 'node_modules', 'react-native', 'scripts', 'react_native_pods')
+  # Add other pods as needed
+end
 
-  config = use_native_modules!
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == 'Flipper'
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+      end
+    end
+  end
 
-  # Flags change depending on the env values.
-  flags = get_default_flags()
-
-  use_react_native!(
-    :path => config[:reactNativePath],
-    # Hermes is now enabled by default. Disable by setting this flag to false.
-    :hermes_enabled => flags[:hermes_enabled],
-    :fabric_enabled => flags[:fabric_enabled],
-    # An absolute path to your application root.
-    :app_path => "#{config[:appPath]}"
+  react_native_post_install(
+    installer,
+    resolved_script_path,
+    :mac_catalyst_enabled => false
   )
-
-  target 'ReactNativeProjectTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-
-  post_install do |installer|
-    # React Native post install steps
-    react_native_post_install(installer)
-
-    # Add any custom post-installation steps here if needed...
-  end
 end
