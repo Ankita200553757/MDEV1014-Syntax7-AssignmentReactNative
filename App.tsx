@@ -14,6 +14,8 @@ import ContactPage from './ContactPage';
 import WelcomePage from './WelcomePage';
 import HomePage from './HomePage';
 
+import { AuthProvider } from './AuthContext'; // Import the AuthProvider
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -21,7 +23,11 @@ const AuthStack = ({ setUserLoggedIn }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Welcome" component={WelcomePage} />
-      <Stack.Screen name="SignUp" component={SignupPage} />
+      <Stack.Screen
+        name="SignUp"
+      >
+        {props => <SignupPage {...props} onSignupSuccess={() => setUserLoggedIn(true)} />}
+      </Stack.Screen>
       <Stack.Screen
         name="SignIn">
         {props => <SignInPage {...props} onLoginSuccess={() => setUserLoggedIn(true)} />}
@@ -63,6 +69,7 @@ const MainTabs = () => {
       <Tab.Screen name="Settings" component={SettingsPage} />
       <Tab.Screen name="About" component={AboutPage} />
       <Tab.Screen name="Contact" component={ContactPage} />
+      <Tab.Screen name="WelcomePage" component={WelcomePage} />
     </Tab.Navigator>
   );
 };
@@ -83,11 +90,13 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {userLoggedIn ? (
-        <MainTabs />
-      ) : (
-        <AuthStack setUserLoggedIn={setUserLoggedIn} />
-      )}
+      <AuthProvider>
+        {userLoggedIn ? (
+          <MainTabs />
+        ) : (
+          <AuthStack setUserLoggedIn={setUserLoggedIn} />
+        )}
+      </AuthProvider>
     </NavigationContainer>
   );
 };

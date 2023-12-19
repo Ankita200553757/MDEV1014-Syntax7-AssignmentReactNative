@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="21"
-        android:targetSdkVersion="33" />
+        android:targetSdkVersion="34" />
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,11 +14,18 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <permission
+        android:name="com.reactnativeproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.reactnativeproject.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
     <application
         android:name="com.reactnativeproject.MainApplication"
         android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
+        android:extractNativeLibs="true"
         android:icon="@drawable/resiizw"
         android:label="@string/app_name"
         android:roundIcon="@drawable/resiizw"
@@ -70,6 +77,21 @@
             android:initOrder="99" />
 
         <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--
+            Service handling Google Sign-In user revocation. For apps that do not integrate with
+            Google Sign-In, this service will never be started.
+        -->
+        <service
+            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+            android:visibleToInstantApps="true" />
+
+        <activity
             android:name="com.google.firebase.auth.internal.GenericIdpActivity"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -105,6 +127,10 @@
                     android:scheme="recaptcha" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
@@ -112,26 +138,6 @@
             android:directBootAware="true"
             android:exported="false"
             android:initOrder="100" />
-
-        <activity
-            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!--
-            Service handling Google Sign-In user revocation. For apps that do not integrate with
-            Google Sign-In, this service will never be started.
-        -->
-        <service
-            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-            android:exported="true"
-            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-            android:visibleToInstantApps="true" />
-
-        <activity
-            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"

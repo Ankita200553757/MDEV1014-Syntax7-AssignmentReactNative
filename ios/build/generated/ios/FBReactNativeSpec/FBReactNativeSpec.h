@@ -620,25 +620,6 @@ namespace facebook {
   } // namespace react
 } // namespace facebook
 
-@protocol NativeDevSplitBundleLoaderSpec <RCTBridgeModule, RCTTurboModule>
-
-- (void)loadBundle:(NSString *)bundlePath
-           resolve:(RCTPromiseResolveBlock)resolve
-            reject:(RCTPromiseRejectBlock)reject;
-
-@end
-namespace facebook {
-  namespace react {
-    /**
-     * ObjC++ class for module 'NativeDevSplitBundleLoader'
-     */
-    class JSI_EXPORT NativeDevSplitBundleLoaderSpecJSI : public ObjCTurboModule {
-    public:
-      NativeDevSplitBundleLoaderSpecJSI(const ObjCTurboModule::InitParams &params);
-    };
-  } // namespace react
-} // namespace facebook
-
 @protocol NativeDevToolsSettingsManagerSpec <RCTBridgeModule, RCTTurboModule>
 
 - (void)setConsolePatchSettings:(NSString *)newConsolePatchSettings;
@@ -962,9 +943,9 @@ namespace JS {
 
       struct Builder {
         struct Input {
-          RCTRequired<bool> isRTL;
           RCTRequired<bool> doLeftAndRightSwapInRTL;
-          RCTRequired<NSString *> localeIdentifier;
+          RCTRequired<bool> isRTL;
+          NSString *localeIdentifier;
         };
 
         /** Initialize with a set of values */
@@ -1349,6 +1330,7 @@ namespace JS {
       struct Builder {
         struct Input {
           RCTRequired<bool> isTesting;
+          std::optional<bool> isDisableAnimations;
           RCTRequired<JS::NativePlatformConstantsIOS::ConstantsReactNativeVersion::Builder> reactNativeVersion;
           RCTRequired<bool> forceTouchAvailable;
           RCTRequired<NSString *> osVersion;
@@ -2046,7 +2028,6 @@ inline JS::NativeBlobModule::Constants::Builder::Builder(Constants i) : _factory
 
 
 
-
 inline JS::NativeDeviceInfo::DisplayMetrics::Builder::Builder(const Input i) : _factory(^{
   NSMutableDictionary *d = [NSMutableDictionary new];
   auto width = i.width.get();
@@ -2184,11 +2165,11 @@ inline std::optional<bool> JS::NativeFrameRateLogger::SpecSetGlobalOptionsOption
 
 inline JS::NativeI18nManager::Constants::Builder::Builder(const Input i) : _factory(^{
   NSMutableDictionary *d = [NSMutableDictionary new];
-  auto isRTL = i.isRTL.get();
-  d[@"isRTL"] = @(isRTL);
   auto doLeftAndRightSwapInRTL = i.doLeftAndRightSwapInRTL.get();
   d[@"doLeftAndRightSwapInRTL"] = @(doLeftAndRightSwapInRTL);
-  auto localeIdentifier = i.localeIdentifier.get();
+  auto isRTL = i.isRTL.get();
+  d[@"isRTL"] = @(isRTL);
+  auto localeIdentifier = i.localeIdentifier;
   d[@"localeIdentifier"] = localeIdentifier;
   return d;
 }) {}
@@ -2317,6 +2298,8 @@ inline JS::NativePlatformConstantsIOS::Constants::Builder::Builder(const Input i
   NSMutableDictionary *d = [NSMutableDictionary new];
   auto isTesting = i.isTesting.get();
   d[@"isTesting"] = @(isTesting);
+  auto isDisableAnimations = i.isDisableAnimations;
+  d[@"isDisableAnimations"] = isDisableAnimations.has_value() ? @((BOOL)isDisableAnimations.value()) : nil;
   auto reactNativeVersion = i.reactNativeVersion.get();
   d[@"reactNativeVersion"] = reactNativeVersion.buildUnsafeRawValue();
   auto forceTouchAvailable = i.forceTouchAvailable.get();

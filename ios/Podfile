@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '12.4'
+platform :ios, '14.0'
 
 # Set use_modular_headers globally
 use_modular_headers!
@@ -7,13 +7,6 @@ use_modular_headers!
 target 'ReactNativeProject' do
   # Add your existing pods here if you have any...
 
-  # Add Firebase pods with modular headers
-  pod 'FirebaseCore', '~> 10.17.0'
-  pod 'Firebase/CoreOnly', '10.17.0'
-  pod 'Firebase/Auth', '10.17.0'
-  pod 'GoogleUtilities/Environment', '~> 7.8'
-  pod 'GoogleUtilities', '~> 7.8'
-  pod 'FirebaseCoreInternal', '10.17.0'
 
   # Add YogaKit pod
   pod 'YogaKit', '~> 1.18.1'

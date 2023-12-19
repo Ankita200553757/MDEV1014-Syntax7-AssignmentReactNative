@@ -952,22 +952,6 @@ namespace facebook {
 namespace facebook {
   namespace react {
     
-    static facebook::jsi::Value __hostFunction_NativeDevSplitBundleLoaderSpecJSI_loadBundle(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
-      return static_cast<ObjCTurboModule&>(turboModule).invokeObjCMethod(rt, PromiseKind, "loadBundle", @selector(loadBundle:resolve:reject:), args, count);
-    }
-
-    NativeDevSplitBundleLoaderSpecJSI::NativeDevSplitBundleLoaderSpecJSI(const ObjCTurboModule::InitParams &params)
-      : ObjCTurboModule(params) {
-        
-        methodMap_["loadBundle"] = MethodMetadata {1, __hostFunction_NativeDevSplitBundleLoaderSpecJSI_loadBundle};
-        
-    }
-  } // namespace react
-} // namespace facebook
-
-namespace facebook {
-  namespace react {
-    
     static facebook::jsi::Value __hostFunction_NativeDevToolsSettingsManagerSpecJSI_setConsolePatchSettings(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
       return static_cast<ObjCTurboModule&>(turboModule).invokeObjCMethod(rt, VoidKind, "setConsolePatchSettings", @selector(setConsolePatchSettings:), args, count);
     }

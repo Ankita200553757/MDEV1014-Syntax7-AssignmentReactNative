@@ -1,20 +1,57 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from './AuthContext';
 
-const AboutPage = () => {
+const AboutPage = ({ navigation }) => {
+  const { user, logout } = useAuth();
+  const [storedUsername, setStoredUsername] = useState('');
+  const [storedEmail, setStoredEmail] = useState('');
+
+  useEffect(() => {
+    // Fetch username and email from AsyncStorage
+    fetchUserDataFromStorage();
+  }, []);
+
+  const fetchUserDataFromStorage = async () => {
+    try {
+      const username = await AsyncStorage.getItem('username');
+      const email = await AsyncStorage.getItem('email');
+
+      // Update the state with fetched data
+      setStoredUsername(username);
+      setStoredEmail(email);
+    } catch (error) {
+      console.error('Error fetching data from AsyncStorage:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    // Call your logout function from the authentication context
+    logout();
+    // Navigate to the login page or any other page
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'WelcomePage' }],
+    });
+  };
+
   return (
     <View style={styles.container}>
-         <Image style={styles.logo} source={require('./images/about.png')} />
-      <Text style={styles.heading}>About Weather App</Text>
-      <Text style={styles.description}>
-        Weather App is a mobile application that provides real-time weather information and forecasts for various locations around the world. It allows users to stay updated with the latest weather conditions and plan their activities accordingly.
-      </Text>
-      <Text style={styles.description}>
-        Our team of developers has worked hard to create a user-friendly and reliable weather app that delivers accurate weather data. We aim to provide a seamless experience for users to access important weather information with ease in future.For the time being the data provided in the application is static
-      </Text>
-      <Text style={styles.description}>
-        We are committed to continuously improving the app and adding new features based on user feedback and technological advancements. Our goal is to empower users with the knowledge and insights they need to make informed decisions based on weather conditions.
-      </Text>
+      {user && (
+        <View>
+          <Text style={styles.text}>Name: {user.name}</Text>
+          <Text style={styles.text}>Email: {user.email}</Text>
+        </View>
+      )}
+
+      {/* Display stored username and email */}
+      {storedUsername && <Text style={styles.text}>Username: {storedUsername}</Text>}
+      {storedEmail && <Text style={styles.text}>Email: {storedEmail}</Text>}
+
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -38,11 +75,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'white',
   },
-  description: {
+  text: {
     fontSize: 16,
     marginBottom: 10,
     color: 'white',
-    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#100529',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

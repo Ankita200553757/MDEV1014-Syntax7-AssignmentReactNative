@@ -1,23 +1,38 @@
-
+// SignUpPage.js
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthViewModel from './AuthViewModel';
+import { useAuth } from './AuthContext';
 
-const SignUpPage = ({ navigation }) => {
+const SignUpPage = ({ navigation, onSignupSuccess }) => {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
   const handleSignUp = async () => {
-    if (email && password) {
+    console.log('Sign Up button pressed');
+    if (email && password && username.length >= 3) {
       try {
-        await AuthViewModel.signUp(email, password);
+        console.log('Calling AuthViewModel.signUp');
+        await AuthViewModel.signUp(email, password, username);
+        await AsyncStorage.setItem('username', username);
+        await AsyncStorage.setItem('email', email);
         Alert.alert('Sign Up Successful', 'Welcome to the app!');
-        navigation.navigate('SignIn');
+        // Automatically sign in the user after signing up
+        console.log('Calling AuthViewModel.signIn');
+        await AuthViewModel.signIn(username, password, login);
+        console.log('Sign in successful');
+        onSignupSuccess();
+        navigation.navigate('Home');
       } catch (error) {
-        Alert.alert('Error', 'Failed to sign up. Please try again.');
+        console.error('Sign Up Error:', error);
+        // Handle the error
       }
     } else {
-      Alert.alert('Error', 'Please enter valid email and password.');
+      console.log('Invalid input fields');
+      Alert.alert('Error', 'Please enter valid email, password, and a username with at least 3 characters.');
     }
   };
 
@@ -37,6 +52,13 @@ const SignUpPage = ({ navigation }) => {
         onChangeText={(text) => setPassword(text)}
         value={password}
         secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Username (min 3 characters)"
+        placeholderTextColor="#100529"
+        onChangeText={(text) => setUsername(text)}
+        value={username}
       />
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>

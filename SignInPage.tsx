@@ -1,17 +1,23 @@
-
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import AuthViewModel from './AuthViewModel';
+import { useAuth } from './AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignInPage = ({ navigation }) => {
+const SignInPage = ({ route, navigation, onLoginSuccess }) => {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
   const handleSignIn = async () => {
     if (email && password) {
       try {
         await AuthViewModel.signIn(email, password);
         Alert.alert('Sign In Successful', 'Welcome back!');
+        await AsyncStorage.setItem('username', email);
+        await AsyncStorage.setItem('email', "");
+        onLoginSuccess(); // Call onLoginSuccess when sign-in is successful
         navigation.navigate('Home');
       } catch (error) {
         Alert.alert('Error', 'Failed to sign in. Please try again.');
@@ -25,7 +31,7 @@ const SignInPage = ({ navigation }) => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Username"
         placeholderTextColor="#100529"
         onChangeText={(text) => setEmail(text)}
         value={email}
